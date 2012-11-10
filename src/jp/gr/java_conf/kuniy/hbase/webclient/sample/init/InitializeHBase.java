@@ -20,19 +20,13 @@ public class InitializeHBase {
 	 * @param args : args[0] - hbase-site.xml file pass
 	 */
 	public static void main(String[] args) throws Exception {
-		// check args
 		if (args.length < 1) {
 			System.out.println("Usage: java InitializeHBase <hbase-site.xml path>");
 		}
-
-		// get configuration
 		Configuration conf = HBaseConfiguration.create();
 		conf.addResource(new Path(args[0]));
 
-		// create table
 		HTableUtil.createHTable(conf, TABLE_NAME, FAMILY_NAME);
-
-		// show attributes
 		HTableUtil.showHTableAttributes(conf, TABLE_NAME);
 	}
 

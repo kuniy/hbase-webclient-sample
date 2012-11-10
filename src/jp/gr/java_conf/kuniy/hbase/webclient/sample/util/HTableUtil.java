@@ -1,6 +1,8 @@
 package jp.gr.java_conf.kuniy.hbase.webclient.sample.util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
@@ -52,6 +54,7 @@ public class HTableUtil {
 			throws ZooKeeperConnectionException, MasterNotRunningException, IOException, IllegalArgumentException {
 		HBaseAdmin admin = new HBaseAdmin(conf);
 		if (admin.isTableAvailable(tableName)) {
+			admin.close();
 			return true;
 		}
 
@@ -76,7 +79,9 @@ public class HTableUtil {
 		desc.addFamily(family);
 		admin.createTable(desc);
 
-		return admin.isTableAvailable(tableName);
+		boolean isTableAvailable = admin.isTableAvailable(tableName);
+		admin.close();
+		return isTableAvailable;
 	}
 
 	/**
@@ -89,7 +94,27 @@ public class HTableUtil {
 	 */
 	public static boolean exist(Configuration conf, String tableName) throws IOException {
 		HBaseAdmin admin = new HBaseAdmin(conf);
-		return admin.isTableAvailable(tableName);
+		boolean isTableAvailable = admin.isTableAvailable(tableName);
+		admin.close();
+		return isTableAvailable;
+	}
+
+
+	/**
+	 * Get HTable List
+	 *
+	 * @param conf org.apache.hadoop.conf.Configuration
+	 * @return tableList List<String>
+	 * @throws IOException
+	 */
+	public static List<String> list(Configuration conf) throws IOException {
+		HBaseAdmin admin = new HBaseAdmin(conf);
+		List<String> tableList = new ArrayList<String>();
+		for (HTableDescriptor desc : admin.listTables()) {
+			tableList.add(desc.getNameAsString());
+		}
+		admin.close();
+		return tableList;
 	}
 
 
@@ -101,7 +126,8 @@ public class HTableUtil {
 	 * @throws IOException
 	 */
 	public static void showHTableAttributes (Configuration conf, String tableName) throws IOException {
-		HTableDescriptor desc = new HTable(conf, tableName).getTableDescriptor();
+		HTable table = new HTable(conf, tableName);
+		HTableDescriptor desc = table.getTableDescriptor();
 		System.out.println("TABLE NAME                : " + desc.getNameAsString());
 		System.out.println("TABLE MAX_FILE_SIZE       : " + desc.getMaxFileSize());
 		System.out.println("TABLE IS_READONLY         : " + desc.isReadOnly());
@@ -120,6 +146,8 @@ public class HTableUtil {
 			System.out.println("CF BLOOM_FILTER_TYPE      : " + family.getBloomFilterType().name());
 			System.out.println("CF REPLICATION_SCOPE      : " + family.getScope());
 		}
+
+		table.close();
 	}
 
 }

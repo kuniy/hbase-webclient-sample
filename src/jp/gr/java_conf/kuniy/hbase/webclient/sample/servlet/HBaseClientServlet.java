@@ -2,6 +2,8 @@ package jp.gr.java_conf.kuniy.hbase.webclient.sample.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -10,6 +12,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+
+import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.ListBase;
+import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.ScanBase;
+import jp.gr.java_conf.kuniy.hbase.webclient.sample.servlet.HBaseClientKeyList.ACTIONS;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.util.JSONUtil;
 
 /**
@@ -61,20 +69,36 @@ public class HBaseClientServlet extends HttpServlet {
 			resp.addCookie(cookie);
 		}
 
-		// access to HBase
-		Object result = execute(req.getParameterMap());
+		// call execute
+		Map<String, String> parameters = new HashMap<String, String>();
+		Enumeration<String> names = req.getParameterNames();
+		while (names.hasMoreElements()) {
+			String key = names.nextElement();
+			parameters.put(key, req.getParameter(key));
+		}
+		String action = req.getParameter(HBaseClientKeyList.ACTION);
+		Object result = (action != null) ? execute(ACTIONS.valueOf(action), parameters) : "";
 
 		// return response
 		resp.setHeader("Access-Control-Allow-Origin","*");
 		resp.setContentType(RESPONSE_CONTENT_TYPE);
 		PrintWriter out = resp.getWriter();
-		//out.write(JSONUtil.toJSON(result));
-		out.write(JSONUtil.toJSON(15));
+		out.write(JSONUtil.toJSON(result));
+		//out.write(JSONUtil.toJSON(15));
 	}
 
-	private Object execute(Map parameters) {
-
-		return null;
+	private Object execute(ACTIONS action, Map<String, String> parameters) throws IOException {
+		Configuration conf = HBaseConfiguration.create();
+		switch (action) {
+		case scan: return new ScanBase().execute(conf, parameters);
+		case list: return new ListBase().execute(conf, parameters);
+		case count:
+		case put:
+		case get:
+		default:
+			break;
+		}
+		return "";
 	}
 
 }
