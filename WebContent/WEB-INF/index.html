@@ -1,0 +1,100 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>HBaseWeb index.html</title>
+
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript">
+<!--
+var handleSuccess = function(data, dataType) {
+	if (data.count) {
+		$("#result").empty().append("COUNT : " + data.count);
+	} else {
+		$("#result").empty();
+		var ulData = $("<ul/>").appendTo("#result");
+		for (var i=0; i<data.length; i++) {
+			var kv = data[i];
+			$("<li/>").append
+				("ROWKEY : " + kv.rowkey + ", FAMILY : " + kv.family + ", COLUMN : " + kv.column + ", VALUE : " + kv.value).appendTo(ulData);
+		}
+	}
+	$("#result").empty().append("COUNT : " + data);
+}
+
+var handleError = function(XMLHttpRequest, textStatus, errorThrown){
+	$("#result").empty().append(errorThrown);
+}
+
+var handleComplete = function(XMLHttpRequest, textStatus) {
+	$("#container").empty();
+	var ulEl = $("<ul/>").appendTo("#container");
+	$("<li/>").append("HTTP status: " + XMLHttpRequest.status).appendTo(ulEl);
+	$("<li/>").append("Status code message: " + XMLHttpRequest.statusText).appendTo(ulEl);
+}
+
+
+function hbase() {
+	var url = 'http://localhost:8080/hbase-webclient-sample/HBaseClient';
+
+	var action = $("#action").attr("value");
+	if (action) {
+		url = url + "?action=" + action;
+	}
+	var table = $("#table").attr("value");
+	if (table) {
+		url = url + "&table=" + table;
+	}
+	var start = $("#start").attr("value");
+	if (start) {
+		url = url + "&start=" + start;
+	}
+	var stop = $("#stop").attr("value");
+	if (stop) {
+		url = url + "&stop=" + stop;
+	}
+
+	// Ajax通信
+	jQuery.support.cors = true; // force cross-site scripting (as of jQuery 1.5)
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: url,
+		cache: false,
+		crossDomain: true,
+		success: handleSuccess,
+		error: handleError,
+		complete: handleComplete
+	});
+
+
+}
+//-->
+</script>
+</head>
+
+<body>
+	<table>
+		<tr>
+			<td><label for="action">ACTION : </label></td>
+			<td><input id="action" type="text" maxlength="20" /></td>
+		</tr>
+		<tr>
+			<td><label for="table">TABLE NAME : </label></td>
+			<td><input id="table" type="text" maxlength="20" /></td>
+		</tr>
+		<tr>
+			<td><label for="start">START ROWKEY : </label></td>
+			<td><input id="start" type="text" maxlength="20" /></td>
+		</tr>
+		<tr>
+			<td><label for="stop">STOP ROWKEY : </label></td>
+			<td><input id="stop" type="text" maxlength="20" /></td>
+		</tr>
+		<tr>
+			<td><button onclick="hbase();">Access to HBase</button></td>
+		</tr>
+	</table>
+	<div id="container"></div>
+	<div id="result"></div>
+</body>
+</html>
