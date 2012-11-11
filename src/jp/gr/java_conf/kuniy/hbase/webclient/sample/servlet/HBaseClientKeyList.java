@@ -14,4 +14,8 @@ public class HBaseClientKeyList {
 
 	public static final String STOP_ROWKEY = "stop";
 
+	public static final String COLUMN_NAME = "column";
+
+	public static final String VALUE = "value";
+
 }

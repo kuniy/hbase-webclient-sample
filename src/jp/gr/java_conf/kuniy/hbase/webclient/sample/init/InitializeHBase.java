@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import jp.gr.java_conf.kuniy.hbase.webclient.sample.useraction.UserActionHTable;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.util.HTableUtil;
 
 import org.apache.hadoop.conf.Configuration;
@@ -14,9 +15,6 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
  * Create HBase tables for "hbase-webclient-sample"
  */
 public class InitializeHBase {
-
-	public static final String TABLE_NAME = "USERACTION";
-	public static final String FAMILY_NAME = "EXEC";
 
 	/**
 	 * Create HBase tables for "hbase-webclient-sample"
@@ -35,8 +33,8 @@ public class InitializeHBase {
 			System.out.println("CONF KEY : " + map.getKey() + ", VALUE : " + map.getValue());
 		}
 
-		HTableUtil.createHTable(conf, TABLE_NAME, FAMILY_NAME);
-		HTableUtil.showHTableAttributes(conf, TABLE_NAME);
+		HTableUtil.createHTable(conf, UserActionHTable.TABLE_NAME, UserActionHTable.FAMILY_NAME);
+		HTableUtil.showHTableAttributes(conf, UserActionHTable.TABLE_NAME);
 	}
 
 }

@@ -19,6 +19,7 @@ import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.CountBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.ListBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.ScanBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.servlet.HBaseClientKeyList.ACTIONS;
+import jp.gr.java_conf.kuniy.hbase.webclient.sample.useraction.UserActionHTable;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.util.JSONUtil;
 
 /**
@@ -82,15 +83,14 @@ public class HBaseClientServlet extends HttpServlet {
 		Object result = (action != null && (tableName != null || action.equals(ACTIONS.list.toString()))) ?
 			execute(ACTIONS.valueOf(action), parameters) : "";
 
-		// TODO put action log
-
+		// put action log
+		new UserActionHTable().put(HBaseConfiguration.create(), sessionid, action, tableName, parameters);
 
 		// return response
 		resp.setHeader("Access-Control-Allow-Origin","*");
 		resp.setContentType(RESPONSE_CONTENT_TYPE);
 		PrintWriter out = resp.getWriter();
 		out.write(JSONUtil.toJSON(result));
-		//out.write(JSONUtil.toJSON(15));
 	}
 
 	private Object execute(ACTIONS action, Map<String, String> parameters) throws IOException {
