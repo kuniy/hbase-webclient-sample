@@ -79,7 +79,8 @@ public class HBaseClientServlet extends HttpServlet {
 		}
 		String action = req.getParameter(HBaseClientKeyList.ACTION);
 		String tableName = req.getParameter(HBaseClientKeyList.TABLE_NAME);
-		Object result = (action != null && tableName != null) ? execute(ACTIONS.valueOf(action), parameters) : "";
+		Object result = (action != null && (tableName != null || action.equals(ACTIONS.list.toString()))) ?
+			execute(ACTIONS.valueOf(action), parameters) : "";
 
 		// TODO put action log
 

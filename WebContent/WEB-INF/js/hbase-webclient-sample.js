@@ -5,22 +5,11 @@ $(function() {
 });
 
 var handleSuccess = function(data, dataType) {
-	if (data.count) {
-		$("#result_internal").empty().append("COUNT : " + data.count);
-	} else {
-		$("#result_internal").empty();
-		var ulData = $("<ul/>").appendTo("#result");
-		for (var i=0; i<data.length; i++) {
-			var kv = data[i];
-			$("<li/>").append
-				("ROWKEY : " + kv.rowkey + ", FAMILY : " + kv.family + ", COLUMN : " + kv.column + ", VALUE : " + kv.value).appendTo(ulData);
-		}
-	}
-	$("#result_internal").empty().append("COUNT : " + data);
+	$("#result_internal").empty().append("SUCCESS : " + data);
 };
 
 var handleError = function(XMLHttpRequest, textStatus, errorThrown){
-	$("#result_internal").empty().append(errorThrown);
+	$("#result_internal").empty().append("ERROR : " + errorThrown);
 };
 
 var handleComplete = function(XMLHttpRequest, textStatus) {
