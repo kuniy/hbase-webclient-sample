@@ -1,100 +1,135 @@
-<html>
+<!doctype html>
+<html lang="us">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>HBaseWeb index.html</title>
-
-<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
-<script type="text/javascript">
-<!--
-var handleSuccess = function(data, dataType) {
-	if (data.count) {
-		$("#result").empty().append("COUNT : " + data.count);
-	} else {
-		$("#result").empty();
-		var ulData = $("<ul/>").appendTo("#result");
-		for (var i=0; i<data.length; i++) {
-			var kv = data[i];
-			$("<li/>").append
-				("ROWKEY : " + kv.rowkey + ", FAMILY : " + kv.family + ", COLUMN : " + kv.column + ", VALUE : " + kv.value).appendTo(ulData);
-		}
-	}
-	$("#result").empty().append("COUNT : " + data);
-}
-
-var handleError = function(XMLHttpRequest, textStatus, errorThrown){
-	$("#result").empty().append(errorThrown);
-}
-
-var handleComplete = function(XMLHttpRequest, textStatus) {
-	$("#container").empty();
-	var ulEl = $("<ul/>").appendTo("#container");
-	$("<li/>").append("HTTP status: " + XMLHttpRequest.status).appendTo(ulEl);
-	$("<li/>").append("Status code message: " + XMLHttpRequest.statusText).appendTo(ulEl);
-}
-
-
-function hbase() {
-	var url = 'http://localhost:8080/hbase-webclient-sample/HBaseClient';
-
-	var action = $("#action").attr("value");
-	if (action) {
-		url = url + "?action=" + action;
-	}
-	var table = $("#table").attr("value");
-	if (table) {
-		url = url + "&table=" + table;
-	}
-	var start = $("#start").attr("value");
-	if (start) {
-		url = url + "&start=" + start;
-	}
-	var stop = $("#stop").attr("value");
-	if (stop) {
-		url = url + "&stop=" + stop;
-	}
-
-	// Ajax通信
-	jQuery.support.cors = true; // force cross-site scripting (as of jQuery 1.5)
-	$.ajax({
-		type: "GET",
-		dataType: "json",
-		url: url,
-		cache: false,
-		crossDomain: true,
-		success: handleSuccess,
-		error: handleError,
-		complete: handleComplete
+	<meta charset="utf-8">
+	<title>jQuery UI Example Page</title>
+	<link href="css/start/jquery-ui-1.9.1.custom.css" rel="stylesheet">
+	<script src="js/jquery-1.7.2.js"></script>
+	<script src="js/jquery-ui-1.9.1.custom.js"></script>
+	<script>
+	$(function() {
+		$( "#operation").accordion();
+		$( "#summary").accordion();
+		$( "#result").accordion();
 	});
 
+	var handleSuccess = function(data, dataType) {
+		if (data.count) {
+			$("#result_internal").empty().append("COUNT : " + data.count);
+		} else {
+			$("#result_internal").empty();
+			var ulData = $("<ul/>").appendTo("#result");
+			for (var i=0; i<data.length; i++) {
+				var kv = data[i];
+				$("<li/>").append
+					("ROWKEY : " + kv.rowkey + ", FAMILY : " + kv.family + ", COLUMN : " + kv.column + ", VALUE : " + kv.value).appendTo(ulData);
+			}
+		}
+		$("#result_internal").empty().append("COUNT : " + data);
+	}
 
-}
-//-->
-</script>
+	var handleError = function(XMLHttpRequest, textStatus, errorThrown){
+		$("#result_internal").empty().append(errorThrown);
+	}
+
+	var handleComplete = function(XMLHttpRequest, textStatus) {
+		$("#status").val(XMLHttpRequest.status);
+		$("#message").val(XMLHttpRequest.statusText);
+	}
+
+
+	function hbase() {
+		var url = "http://localhost:8080/hbase-webclient-sample/HBaseClient";
+
+		var param = "";
+		var delim = "?";
+		$(".param").each(function () {
+			if ($(this).attr("value") != "") {
+				param = param + delim + $(this).attr("id") + "=" + $(this).attr("value");
+				delim = "&";
+			}
+		});
+		$("#query").val("/HBaseClient" + param);
+
+		// Ajax通信
+		jQuery.support.cors = true;
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: url + param,
+			cache: false,
+			crossDomain: true,
+			success: handleSuccess,
+			error: handleError,
+			complete: handleComplete
+		});
+		$("#status").val("RUNNING");
+	}
+	</script>
+	<style>
+	body {
+		font: 62.5% "Trebuchet MS", sans-serif;
+		margin: 50px;
+	}
+	td {
+		padding-right: 5px;
+	}
+	#operation {
+		float: left;
+		width: 28%;
+	}
+	#operation_internal {
+		height: 500px;
+	}
+	#right {
+		float: right;
+		width: 72%;
+	}
+	#summary_internal {
+		height: 85px;
+	}
+	#result_internal {
+		height: 363px;
+	}
+	</style>
 </head>
-
 <body>
-	<table>
-		<tr>
-			<td><label for="action">ACTION : </label></td>
-			<td><input id="action" type="text" maxlength="20" /></td>
-		</tr>
-		<tr>
-			<td><label for="table">TABLE NAME : </label></td>
-			<td><input id="table" type="text" maxlength="20" /></td>
-		</tr>
-		<tr>
-			<td><label for="start">START ROWKEY : </label></td>
-			<td><input id="start" type="text" maxlength="20" /></td>
-		</tr>
-		<tr>
-			<td><label for="stop">STOP ROWKEY : </label></td>
-			<td><input id="stop" type="text" maxlength="20" /></td>
-		</tr>
-		<tr>
-			<td><button onclick="hbase();">Access to HBase</button></td>
-		</tr>
-	</table>
-	<div id="container"></div>
-	<div id="result"></div>
+<div id="operation">
+	<h3>OPERATION</h3>
+	<div id="operation_internal">
+		<table>
+			<tr><td><label for="action">ACTION</label></td>
+			<td><input id="action"  class="param" type="text" size="20" /></td></tr>
+			<tr><td><label for="table">TABLE NAME</label></td>
+			<td><input id="table"  class="param" type="text" size="20" /></td></tr>
+			<tr><td><label for="family">COLUMN FAMILY</label></td>
+			<td><input id="family"  class="param" type="text" size="20" /></td></tr>
+			<tr><td><label for="start">START ROWKEY</label></td>
+			<td><input id="start"  class="param" type="text" size="20" /></td></tr>
+			<tr><td><label for="stop">STOP ROWKEY</label></td>
+			<td><input id="stop"  class="param" type="text" size="20" /></td></tr>
+			<tr><td><button onclick="hbase();">EXECUTE</button></td></tr>
+		</table>
+	</div>
+</div>
+<div id="right">
+	<div id="summary">
+		<h3>SUMMARY</h3>
+		<div id="summary_internal">
+			<table>
+				<tr><td><label for="query">QUREY</label></td>
+				<td><input id="query"  type="text" size="115" disabled/></td></tr>
+				<tr><td><label for="status">HTTP STATUS</label></td>
+				<td><input id="status"  type="text" size="115" disabled/></td></tr>
+				<tr><td><label for="message">MESSAGE</label></td>
+				<td><input id="message" type="text" size="115" disabled/></td></tr>
+			</table>
+		</div>
+	</div>
+	<div id="result">
+		<h3>RESULT</h3>
+		<div id="result_internal"></div>
+	</div>
+</div>
 </body>
 </html>

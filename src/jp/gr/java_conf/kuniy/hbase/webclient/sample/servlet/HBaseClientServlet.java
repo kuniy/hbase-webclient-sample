@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 
+import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.CountBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.ListBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.ScanBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.servlet.HBaseClientKeyList.ACTIONS;
@@ -77,7 +78,11 @@ public class HBaseClientServlet extends HttpServlet {
 			parameters.put(key, req.getParameter(key));
 		}
 		String action = req.getParameter(HBaseClientKeyList.ACTION);
-		Object result = (action != null) ? execute(ACTIONS.valueOf(action), parameters) : "";
+		String tableName = req.getParameter(HBaseClientKeyList.TABLE_NAME);
+		Object result = (action != null && tableName != null) ? execute(ACTIONS.valueOf(action), parameters) : "";
+
+		// TODO put action log
+
 
 		// return response
 		resp.setHeader("Access-Control-Allow-Origin","*");
@@ -90,13 +95,12 @@ public class HBaseClientServlet extends HttpServlet {
 	private Object execute(ACTIONS action, Map<String, String> parameters) throws IOException {
 		Configuration conf = HBaseConfiguration.create();
 		switch (action) {
-		case scan: return new ScanBase().execute(conf, parameters);
-		case list: return new ListBase().execute(conf, parameters);
-		case count:
-		case put:
-		case get:
-		default:
-			break;
+			case scan: return new ScanBase().execute(conf, parameters);
+			case list: return new ListBase().execute(conf, parameters);
+			case count: return new CountBase().execute(conf, parameters);
+			case put:
+			case get:
+			default:
 		}
 		return "";
 	}

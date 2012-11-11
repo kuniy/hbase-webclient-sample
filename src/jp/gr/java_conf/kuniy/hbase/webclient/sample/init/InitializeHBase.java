@@ -1,5 +1,9 @@
 package jp.gr.java_conf.kuniy.hbase.webclient.sample.init;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.util.HTableUtil;
 
 import org.apache.hadoop.conf.Configuration;
@@ -25,6 +29,11 @@ public class InitializeHBase {
 		}
 		Configuration conf = HBaseConfiguration.create();
 		conf.addResource(new Path(args[0]));
+
+		for (Iterator<Map.Entry<String, String>> e = conf.iterator(); e.hasNext(); ) {
+			Entry<String, String> map = e.next();
+			System.out.println("CONF KEY : " + map.getKey() + ", VALUE : " + map.getValue());
+		}
 
 		HTableUtil.createHTable(conf, TABLE_NAME, FAMILY_NAME);
 		HTableUtil.showHTableAttributes(conf, TABLE_NAME);

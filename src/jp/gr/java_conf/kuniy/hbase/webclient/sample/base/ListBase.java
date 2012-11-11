@@ -10,7 +10,7 @@ import jp.gr.java_conf.kuniy.hbase.webclient.sample.util.HTableUtil;
 public class ListBase implements HBaseClinetBase {
 
 	@Override
-	public Object execute(Configuration conf, Map parameters) throws IOException {
+	public Object execute(Configuration conf, Map<String, String> parameters) throws IOException {
 		return HTableUtil.list(conf);
 	}
 
