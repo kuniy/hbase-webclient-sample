@@ -1,0 +1,30 @@
+body {
+	font: 62.5% "Trebuchet MS", sans-serif;
+	margin: 50px;
+}
+
+td {
+	padding-right: 5px;
+}
+
+#operation {
+	float: left;
+	width: 28%;
+}
+
+#operation_internal {
+	height: 500px;
+}
+
+#right {
+	float: right;
+	width: 72%;
+}
+
+#summary_internal {
+	height: 85px;
+}
+
+#result_internal {
+	height: 363px;
+}
