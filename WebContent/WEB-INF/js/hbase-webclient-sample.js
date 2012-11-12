@@ -44,4 +44,6 @@ function hbase() {
 		complete: handleComplete
 	});
 	$("#status").val("RUNNING");
+	$("#message").val("");
+	$("#result_internal").empty();
 }
