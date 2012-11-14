@@ -5,7 +5,9 @@ import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 
-public interface HBaseClinetBase {
+public abstract class HBaseClinetBase {
+
+	public final String CHECK_ERR_MSG = "[ERROR] parameter error in " + this.getClass().getSimpleName() + "#check.";
 
 	/**
 	 * exeute
@@ -16,6 +18,14 @@ public interface HBaseClinetBase {
 	 * @throws IOException
 	 * @throws Throwable
 	 */
-	public Object execute(Configuration conf, Map<String, String> parameters) throws IOException;
+	public abstract Object execute(Configuration conf, Map<String, String> parameters) throws IOException;
 
+	/**
+	 * check parameters
+	 *
+	 * @param conf org.apache.hadoop.conf.Configuration
+	 * @param parameters Map<String, String>
+	 * @return boolean
+	 */
+	public abstract boolean check(Configuration conf, Map<String, String> parameters);
 }

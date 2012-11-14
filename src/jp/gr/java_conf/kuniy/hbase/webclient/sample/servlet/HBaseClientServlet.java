@@ -18,6 +18,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.CountBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.ListBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.ScanBase;
+import static jp.gr.java_conf.kuniy.hbase.webclient.sample.servlet.HBaseClientKeyList.*;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.servlet.HBaseClientKeyList.ACTIONS;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.useraction.UserActionHTable;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.util.JSONUtil;
@@ -78,10 +79,7 @@ public class HBaseClientServlet extends HttpServlet {
 			String key = names.nextElement();
 			parameters.put(key, req.getParameter(key));
 		}
-		String action = req.getParameter(HBaseClientKeyList.ACTION);
-		//String tableName = req.getParameter(HBaseClientKeyList.TABLE_NAME);
-		//Object result = (action != null && (tableName != null || action.equals(ACTIONS.list.toString()))) ?
-		//	execute(ACTIONS.valueOf(action), parameters) : "";
+		String action = req.getParameter(ACTION);
 		Object result = (action != null) ? execute(ACTIONS.valueOf(action), parameters) : "[ERROR] ACTION is not set.";
 
 		// put action log
@@ -97,8 +95,8 @@ public class HBaseClientServlet extends HttpServlet {
 	private Object execute(ACTIONS action, Map<String, String> parameters) throws IOException {
 		Configuration conf = HBaseConfiguration.create();
 		switch (action) {
-			case scan: return new ScanBase().execute(conf, parameters);
-			case list: return new ListBase().execute(conf, parameters);
+			case scan:  return new ScanBase().execute(conf, parameters);
+			case list:  return new ListBase().execute(conf, parameters);
 			case count: return new CountBase().execute(conf, parameters);
 			case put:
 			case get:

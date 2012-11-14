@@ -8,6 +8,8 @@ public class HBaseClientKeyList {
 
 	public static final String TABLE_NAME = "table";
 
+	public static final String ROWKEY = "rowkey";
+
 	public static final String FAMILY_NAME = "family";
 
 	public static final String START_ROWKEY = "start";
