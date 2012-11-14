@@ -16,8 +16,7 @@ public class UserActionHTable {
 
 	public static final String COL_PARAM_NAME = "PARAM";
 
-	public void put(Configuration conf, String sessionid,
-			String action, String tableName, Map<String, String> parameters) {
+	public void put(Configuration conf, String sessionid, String action, Map<String, String> parameters) {
 
 	}
 }

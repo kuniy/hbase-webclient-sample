@@ -79,12 +79,13 @@ public class HBaseClientServlet extends HttpServlet {
 			parameters.put(key, req.getParameter(key));
 		}
 		String action = req.getParameter(HBaseClientKeyList.ACTION);
-		String tableName = req.getParameter(HBaseClientKeyList.TABLE_NAME);
-		Object result = (action != null && (tableName != null || action.equals(ACTIONS.list.toString()))) ?
-			execute(ACTIONS.valueOf(action), parameters) : "";
+		//String tableName = req.getParameter(HBaseClientKeyList.TABLE_NAME);
+		//Object result = (action != null && (tableName != null || action.equals(ACTIONS.list.toString()))) ?
+		//	execute(ACTIONS.valueOf(action), parameters) : "";
+		Object result = (action != null) ? execute(ACTIONS.valueOf(action), parameters) : "[ERROR] ACTION is not set.";
 
 		// put action log
-		new UserActionHTable().put(HBaseConfiguration.create(), sessionid, action, tableName, parameters);
+		new UserActionHTable().put(HBaseConfiguration.create(), sessionid, action, parameters);
 
 		// return response
 		resp.setHeader("Access-Control-Allow-Origin","*");

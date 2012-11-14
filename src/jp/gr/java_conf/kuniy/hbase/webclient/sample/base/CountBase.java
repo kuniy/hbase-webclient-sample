@@ -19,9 +19,12 @@ public class CountBase implements HBaseClinetBase {
 
 	@Override
 	public Object execute(Configuration conf, Map<String, String> parameters) throws IOException {
-		long l1 = countScan(conf, parameters);
-		long l2 = countCoprocessor(conf, parameters);
-		return l2;
+		if (parameters.containsKey(HBaseClientKeyList.COPROCESSOR)) {
+			long count = countCoprocessor(conf, parameters);
+			return (count != -1) ? count : "[ERROR] throwable error in AggregationClient#rowCount.";
+		} else {
+			return countScan(conf, parameters);
+		}
 	}
 
 	private long countScan(Configuration conf, Map<String, String> parameters) throws IOException {
@@ -53,7 +56,7 @@ public class CountBase implements HBaseClinetBase {
 
 		AggregationClient client = new AggregationClient(conf);
 		Scan scan = new Scan();
-		scan.addFamily(Bytes.toBytes("stats")); // TODO Coprocessior : require Column Family
+		scan.addFamily(Bytes.toBytes(parameters.get(HBaseClientKeyList.FAMILY_NAME)));
 		if (parameters.containsKey(HBaseClientKeyList.START_ROWKEY)) {
 			scan.setStartRow(Bytes.toBytes(parameters.get(HBaseClientKeyList.START_ROWKEY)));
 		}

@@ -24,7 +24,13 @@ function hbase() {
 	var param = "";
 	var delim = "?";
 	$(".param").each(function () {
-		if ($(this).attr("value") != "") {
+		if ($(this).attr("type") == "checkbox") {
+			if ($(this).attr('checked')) {
+				param = param + delim + $(this).attr("id") + "=" + $(this).attr("value");
+				delim = "&";
+			}
+		}
+		else if ($(this).attr("value") != "") {
 			param = param + delim + $(this).attr("id") + "=" + $(this).attr("value");
 			delim = "&";
 		}

@@ -18,4 +18,6 @@ public class HBaseClientKeyList {
 
 	public static final String VALUE = "value";
 
+	public static final String COPROCESSOR = "coprocessor";
+
 }
