@@ -17,6 +17,7 @@ import org.apache.hadoop.hbase.HBaseConfiguration;
 
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.CountBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.ListBase;
+import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.PutBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.ScanBase;
 import static jp.gr.java_conf.kuniy.hbase.webclient.sample.servlet.HBaseClientKeyList.*;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.servlet.HBaseClientKeyList.ACTIONS;
@@ -80,10 +81,12 @@ public class HBaseClientServlet extends HttpServlet {
 			parameters.put(key, req.getParameter(key));
 		}
 		String action = req.getParameter(ACTION);
+		Long startTime = System.nanoTime();
 		Object result = (action != null) ? execute(ACTIONS.valueOf(action), parameters) : "[ERROR] ACTION is not set.";
+		Long endTime = System.nanoTime();
 
 		// put action log
-		new UserActionHTable().put(HBaseConfiguration.create(), sessionid, action, parameters);
+		new UserActionHTable().put(HBaseConfiguration.create(), sessionid, action, (endTime - startTime), parameters);
 
 		// return response
 		resp.setHeader("Access-Control-Allow-Origin","*");
@@ -98,7 +101,7 @@ public class HBaseClientServlet extends HttpServlet {
 			case scan:  return new ScanBase().execute(conf, parameters);
 			case list:  return new ListBase().execute(conf, parameters);
 			case count: return new CountBase().execute(conf, parameters);
-			case put:
+			case put:   return new PutBase().execute(conf, parameters);
 			case get:
 			default:
 		}

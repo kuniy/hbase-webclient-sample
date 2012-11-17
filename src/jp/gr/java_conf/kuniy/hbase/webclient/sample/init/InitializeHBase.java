@@ -33,8 +33,8 @@ public class InitializeHBase {
 			System.out.println("CONF KEY : " + map.getKey() + ", VALUE : " + map.getValue());
 		}
 
-		HTableUtil.createHTable(conf, UserActionHTable.TABLE_NAME, UserActionHTable.FAMILY_NAME);
-		HTableUtil.showHTableAttributes(conf, UserActionHTable.TABLE_NAME);
+		HTableUtil.createHTable(conf, UserActionHTable.USER_ACTION_TABLE_NAME, UserActionHTable.USER_ACTION_FAMILY_NAME);
+		HTableUtil.showHTableAttributes(conf, UserActionHTable.USER_ACTION_TABLE_NAME);
 	}
 
 }

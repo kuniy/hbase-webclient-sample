@@ -47,6 +47,9 @@ public class CountBase extends HBaseClinetBase {
 		HTable table = HTablePoolUtil.getTable(conf, parameters.get(TABLE_NAME));
 
 		Scan scan = new Scan();
+		if (parameters.containsKey(FAMILY_NAME)) {
+			scan.addFamily(Bytes.toBytes(parameters.get(FAMILY_NAME)));
+		}
 		if (parameters.containsKey(START_ROWKEY)) {
 			scan.setStartRow(Bytes.toBytes(parameters.get(START_ROWKEY)));
 		}
