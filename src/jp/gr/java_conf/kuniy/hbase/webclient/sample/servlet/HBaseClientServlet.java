@@ -103,7 +103,7 @@ public class HBaseClientServlet extends HttpServlet {
 			case list:  return new ListBase().execute(conf, parameters);
 			case count: return new CountBase().execute(conf, parameters);
 			case put:   return new PutBase().execute(conf, parameters);
-			case get:	return new GetBase().execute(conf, parameters);
+			case get:   return new GetBase().execute(conf, parameters);
 			default:
 		}
 		return "";
