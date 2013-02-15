@@ -16,6 +16,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.CountBase;
+import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.GetBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.ListBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.PutBase;
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.base.ScanBase;
@@ -102,7 +103,7 @@ public class HBaseClientServlet extends HttpServlet {
 			case list:  return new ListBase().execute(conf, parameters);
 			case count: return new CountBase().execute(conf, parameters);
 			case put:   return new PutBase().execute(conf, parameters);
-			case get:
+			case get:	return new GetBase().execute(conf, parameters);
 			default:
 		}
 		return "";

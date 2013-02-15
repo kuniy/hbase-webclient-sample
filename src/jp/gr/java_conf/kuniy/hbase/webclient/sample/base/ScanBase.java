@@ -4,7 +4,6 @@ import static jp.gr.java_conf.kuniy.hbase.webclient.sample.servlet.HBaseClientKe
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.TreeMap;
 
 import jp.gr.java_conf.kuniy.hbase.webclient.sample.util.HTablePoolUtil;
 
@@ -14,7 +13,6 @@ import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.filter.KeyOnlyFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 
 public class ScanBase extends HBaseClinetBase {
